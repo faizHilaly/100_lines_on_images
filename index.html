@@ -1,40 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Lines</title>
-    <title>100 Line Project in ASCII</title>
-<style>
+    <style>
         body {
-        body, html {
-            height: 100%;
-margin: 0;
-overflow: hidden;
+            margin: 0;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-family: monospace;
-background-color: #f0f0f0;
-}
+            background-color: #f0f0f0;
+        }
         canvas {
             border: 1px solid #000;
-        #container {
-            position: relative;
-            height: 100%;
-            width: 100%;
         }
-        .line {
-            position: absolute;
-            transition: top 0.5s ease-in;
-            white-space: pre;
-            cursor: pointer;
-}
-</style>
+    </style>
 </head>
 <body>
     <canvas id="canvas"></canvas>
-    <div id="container"></div>
-<script>
+    <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const lines = [];
@@ -100,121 +87,8 @@ background-color: #f0f0f0;
                 if (line.y1 < 0 || line.y1 > canvas.height) line.vy1 *= -1;
                 if (line.x2 < 0 || line.x2 > canvas.width) line.vx2 *= -1;
                 if (line.y2 < 0 || line.y2 > canvas.height) line.vy2 *= -1;
-        const container = document.getElementById('container');
-        const text = [
-            "                                                                                ",
-            "    ____ ____   ____                                                            ",
-            "   |    |    | |    |                                                           ",
-            "   |    |    | |    |                                                           ",
-            "   |    |    | |    |                                                           ",
-            "   |    |    | |____|                                                           ",
-            "   |    |    |                                                                  ",
-            "   |____|____|                                                                  ",
-            "                                                                                ",
-            "                                                                                ",
-            "   |    |                                                                       ",
-            "   |    |                                                                       ",
-            "   |    |                                                                       ",
-            "   |    |                                                                       ",
-            "   |    |                                                                       ",
-            "   |    |                                                                       ",
-            "   |____|                                                                       ",
-            "                                                                                ",
-            "                                                                                ",
-            "   |\    | ____                                                                 ",
-            "   | \   | |   \                                                                ",
-            "   |  \  | |    \                                                               ",
-            "   |   \ | |    |                                                               ",
-            "   |    \| |___/                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "   ____                                                                         ",
-            "   |   \                                                                        ",
-            "   |    \                                                                       ",
-            "   |    |                                                                       ",
-            "   |___/                                                                        ",
-            "                                                                                ",
-            "                                                                                ",
-            "   ____   ____    ___      ___  ____   ____  _____                              ",
-            "   |   \ |    |  |   \    /   | |   \ |    | |                                  ",
-            "   |    \|    |  |    \  /    | |    \|    | |                                  ",
-            "   |           | |     \/     | |           | |____                             ",
-            "   |     \     | |            | |     \     | |                                 ",
-            "   |      \    | |    /\     /  |      \    | |                                 ",
-            "   |       \___| |___/  \___/   |       \___| |_____                            ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "   ____   ____    ___      ___  ____   ____  _____                              ",
-            "   |   \ |    |  |   \    /   | |   \ |    | |                                  ",
-            "   |    \|    |  |    \  /    | |    \|    | |                                  ",
-            "   |           | |     \/     | |           | |____                             ",
-            "   |     \     | |            | |     \     | |                                 ",
-            "   |      \    | |    /\     /  |      \    | |                                 ",
-            "   |       \___| |___/  \___/   |       \___| |_____                            ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                ",
-            "                                                                                "
-        ];
-
-        function createLines() {
-            text.forEach((line, index) => {
-                const span = document.createElement('span');
-                span.textContent = line;
-                span.className = 'line';
-                span.style.left = '10px';
-                span.style.top = `${index * 10}px`;
-                container.appendChild(span);
-});
-}
+            });
+        }
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -227,19 +101,13 @@ background-color: #f0f0f0;
                 ctx.lineTo(line.x2, line.y2);
                 ctx.stroke();
             });
-        function applyGravity(element) {
-            const containerHeight = container.clientHeight;
-            const elementHeight = element.clientHeight;
-            element.style.top = `${containerHeight - elementHeight}px`;
-}
+        }
 
         function animate() {
             updateLines();
             draw();
             requestAnimationFrame(animate);
-        function resetPosition(element, originalTop) {
-            element.style.top = originalTop;
-}
+        }
 
         canvas.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX - canvas.offsetLeft;
@@ -247,15 +115,9 @@ background-color: #f0f0f0;
         });
 
         window.addEventListener('resize', resizeCanvas);
-        createLines();
 
         init();
         animate();
-        document.querySelectorAll('.line').forEach(line => {
-            const originalTop = line.style.top;
-            line.addEventListener('mouseover', () => applyGravity(line));
-            line.addEventListener('mouseout', () => resetPosition(line, originalTop));
-        });
-</script>
+    </script>
 </body>
 </html>
