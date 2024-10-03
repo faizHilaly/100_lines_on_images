@@ -1,17 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Lines</title>
     <title>100 Line Project in ASCII</title>
-    <style>
+<style>
+        body {
         body, html {
             height: 100%;
-            margin: 0;
-            overflow: hidden;
+margin: 0;
+overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             font-family: monospace;
-            background-color: #f0f0f0;
-        }
+background-color: #f0f0f0;
+}
+        canvas {
+            border: 1px solid #000;
         #container {
             position: relative;
             height: 100%;
@@ -22,12 +28,78 @@
             transition: top 0.5s ease-in;
             white-space: pre;
             cursor: pointer;
-        }
-    </style>
+}
+</style>
 </head>
 <body>
+    <canvas id="canvas"></canvas>
     <div id="container"></div>
-    <script>
+<script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const lines = [];
+        const numLines = 100;
+        const maxSpeed = 5;
+        const mouseInfluenceRadius = 100;
+
+        let mouse = { x: 0, y: 0 };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth - 20;
+            canvas.height = window.innerHeight - 20;
+        }
+
+        function createLine() {
+            return {
+                x1: Math.random() * canvas.width,
+                y1: Math.random() * canvas.height,
+                x2: Math.random() * canvas.width,
+                y2: Math.random() * canvas.height,
+                vx1: 0, vy1: 0, vx2: 0, vy2: 0
+            };
+        }
+
+        function init() {
+            resizeCanvas();
+            for (let i = 0; i < numLines; i++) {
+                lines.push(createLine());
+            }
+        }
+
+        function updateLines() {
+            lines.forEach(line => {
+                const dx1 = mouse.x - line.x1;
+                const dy1 = mouse.y - line.y1;
+                const dx2 = mouse.x - line.x2;
+                const dy2 = mouse.y - line.y2;
+                const dist1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+                const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+
+                if (dist1 < mouseInfluenceRadius) {
+                    line.vx1 -= (dx1 / dist1) * maxSpeed;
+                    line.vy1 -= (dy1 / dist1) * maxSpeed;
+                }
+
+                if (dist2 < mouseInfluenceRadius) {
+                    line.vx2 -= (dx2 / dist2) * maxSpeed;
+                    line.vy2 -= (dy2 / dist2) * maxSpeed;
+                }
+
+                line.x1 += line.vx1;
+                line.y1 += line.vy1;
+                line.x2 += line.vx2;
+                line.y2 += line.vy2;
+
+                line.vx1 *= 0.95;
+                line.vy1 *= 0.95;
+                line.vx2 *= 0.95;
+                line.vy2 *= 0.95;
+
+                // Bounce off canvas edges
+                if (line.x1 < 0 || line.x1 > canvas.width) line.vx1 *= -1;
+                if (line.y1 < 0 || line.y1 > canvas.height) line.vy1 *= -1;
+                if (line.x2 < 0 || line.x2 > canvas.width) line.vx2 *= -1;
+                if (line.y2 < 0 || line.y2 > canvas.height) line.vy2 *= -1;
         const container = document.getElementById('container');
         const text = [
             "                                                                                ",
@@ -141,26 +213,49 @@
                 span.style.left = '10px';
                 span.style.top = `${index * 10}px`;
                 container.appendChild(span);
-            });
-        }
+});
+}
 
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'blue';
+            ctx.lineWidth = 2;
+
+            lines.forEach(line => {
+                ctx.beginPath();
+                ctx.moveTo(line.x1, line.y1);
+                ctx.lineTo(line.x2, line.y2);
+                ctx.stroke();
+            });
         function applyGravity(element) {
             const containerHeight = container.clientHeight;
             const elementHeight = element.clientHeight;
             element.style.top = `${containerHeight - elementHeight}px`;
-        }
+}
 
+        function animate() {
+            updateLines();
+            draw();
+            requestAnimationFrame(animate);
         function resetPosition(element, originalTop) {
             element.style.top = originalTop;
-        }
+}
 
+        canvas.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX - canvas.offsetLeft;
+            mouse.y = e.clientY - canvas.offsetTop;
+        });
+
+        window.addEventListener('resize', resizeCanvas);
         createLines();
 
+        init();
+        animate();
         document.querySelectorAll('.line').forEach(line => {
             const originalTop = line.style.top;
             line.addEventListener('mouseover', () => applyGravity(line));
             line.addEventListener('mouseout', () => resetPosition(line, originalTop));
         });
-    </script>
+</script>
 </body>
 </html>
